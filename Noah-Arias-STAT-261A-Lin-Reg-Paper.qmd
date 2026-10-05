@@ -1,0 +1,127 @@
+---
+title: "USA Women's Soccer League"
+subtitle: "An analysis on the linear predictability of the average goal differential per game."
+author: "Noah Arias"
+thanks: "Project repository available at: [https://github.com/ngarias/SJSU-STAT-257-Paper-1/tree/main](GitHub Repository)."
+date: today
+date-format: long
+abstract: ""
+format: pdf
+bibliography: references.bib
+number-sections: true
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+# load libraries
+library(tidyverse)
+library(nwslR)
+library(ggpubr)
+library(patchwork)
+library(broom)
+
+download.file("https://raw.githubusercontent.com/SCOREnetworkorg/sports-data-repository/main/data/nwsl-team-stats.csv", destfile = "nwsl-team-stats.csv")
+
+nwsldata <- read.csv("nwsl-team-stats.csv")
+```
+
+# Introduction
+
+In the United States of America (USA), the top professional women's soccer league is the [National Women's Soccer League](https://www.nwslsoccer.com/). It was established in 2012 as the successor to Women's Professional Soccer, and its scope of play is exclusively the USA. As of 2026, there are sixteen soccer teams present and all sixteen are present in the dataset used for this analysis. The dataset in question contains various types of statistics over each `
+
+One of the key team metrics is its goal differential. It is defined as the difference between the number of goals scored by the team minus the number of goals scored by the opponent. In this data set, the number of goals scored by the opponent is refered to as goals conceded.
+
+Since the goal differential metric is defined as the difference between the number of goals scored and number of goals scored upon, factors that go into either independent variable, such as passing and crossing accuracy, shot accuracy, and ball possession could be useful at predicting how successful a team was going to be in any given year.
+
+The indepedent variables are the following:
+
+`cross_accuracy`: the percentage success rate of a player attemping a wide pass to another player with the intention of creating an opportunity of scoring a goal.
+
+`goal_conversion_pct`: the ratio of goals scored divided by the total number of shots expressed as a percentage.
+
+`pass_pct`: the success rate of one player passing the soccer ball to another teammate expressed as a percentage.
+
+`pass_pct_opposition_half`: the success rate of one player passing the soccer ball to another teammate exclusively in the opposing team's size of the field, expressed as a percentage.
+
+`possession_pct`: the ratio of the time of the match where the ball is controlled by the team, expressed as a percentage.
+
+`shot_accuracy`: the ratio of the number of successful goal shots divided by the total number of shots on goal, expressed as a percentage.
+
+`tackle_success_pct`: the percentage of tackles where the defending player legally and successfully wins the soccer ball and either possesses the ball themself or passes the ball to another teammate.
+
+In this report, we try and determine if there is a linear relationship that reasonably predicts average goal differential per game based on cross accuracy, goal conversion percentage, pass percentage, pass percentage on opposition half, posession percentage, shot accuracy, and tackle success percentage.
+
+
+# Data {#sec-data}
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Linear regression on cross accuracy, goal conversion percentage, pass percentage, pass percentage on opposition half, posession percentage, shot accuracy, and tackle success percentage."
+
+nwsldata <- nwsldata |>
+  mutate(goal_diff_per_game = goal_differential / games_played)
+```
+
+
+# Methods {#sec-methods}
+
+Below is the linear regression formula:
+
+$$Y = \beta_0 + \beta_1 X_{ca} + \beta_2 X_{gcp} + \beta_3 X_{pap} + \beta_4 X_{ppof} + \beta_5 X_{pop} + \beta_6 X_{sa} + \beta_7 X_{tsp} + \varepsilon_i$$
+
+$X_{ca}$ is the variable for cross accuracy
+
+$X_{gcp}$ is the variable for goal conversion percentage
+
+$X_{pap}$ is the variable for pass percentage
+
+$X_{ppof}$ is the variable for pass percentage in opposition half
+
+$X_{pop}$ is the variable for posession percentage
+
+$X_{sa}$ is the variable for shot accuracy
+
+$X_{tsp}$ is the variable for tackle success percentage
+
+Each $\beta$ that is matched with a variable represents that variable's coefficient.
+
+We check in the 
+
+# Results {#sec-results}
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+lm <- lm(goal_diff_per_game ~ cross_accuracy + goal_conversion_pct + pass_pct + pass_pct_opposition_half + possession_pct + shot_accuracy + tackle_success_pct, data = nwsldata)
+
+tidy(lm, conf.int = TRUE)
+glance(lm)
+```
+
+
+# Discussion {#sec-discussion}
+
+
+
+# References
+
+
+
+
+
+
+
+<!--
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: ""
+
+
+```
+-->
