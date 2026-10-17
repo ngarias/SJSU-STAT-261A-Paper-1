@@ -1,6 +1,6 @@
 ---
-title: "USA Women's Soccer League"
-subtitle: "An analysis on the linear predictability of the average goal differential per game."
+title: "Predicting Net Goals Between 2016 through 2022 in USA Women's Soccer League"
+subtitle: "A linear predictability analysis on the average goal differential per game."
 author: "Noah Arias"
 thanks: "Project repository available at: [https://github.com/ngarias/SJSU-STAT-257-Paper-1/tree/main](GitHub Repository)."
 date: today
@@ -17,6 +17,7 @@ number-sections: true
 #| message: false
 # load libraries
 library(tidyverse)
+library(moderndive)
 library(nwslR)
 library(ggpubr)
 library(patchwork)
@@ -25,6 +26,14 @@ library(broom)
 download.file("https://raw.githubusercontent.com/SCOREnetworkorg/sports-data-repository/main/data/nwsl-team-stats.csv", destfile = "nwsl-team-stats.csv")
 
 nwsldata <- read.csv("nwsl-team-stats.csv")
+
+nwsldata <- nwsldata |>
+  mutate(goal_diff_per_game = goal_differential / games_played)
+
+nwsl_fit <- lm(goal_diff_per_game ~ cross_accuracy + goal_conversion_pct + pass_pct +
+                 pass_pct_opposition_half + possession_pct + shot_accuracy +
+                 tackle_success_pct,
+               data = nwsldata)
 ```
 
 # Introduction
@@ -53,22 +62,16 @@ The indepedent variables are the following:
 
 In this report, we try and determine if there is a linear relationship that reasonably predicts average goal differential per game based on cross accuracy, goal conversion percentage, pass percentage, pass percentage on opposition half, posession percentage, shot accuracy, and tackle success percentage.
 
-
 # Data {#sec-data}
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| fig-cap: "Linear regression on cross accuracy, goal conversion percentage, pass percentage, pass percentage on opposition half, posession percentage, shot accuracy, and tackle success percentage."
 
-nwsldata <- nwsldata |>
-  mutate(goal_diff_per_game = goal_differential / games_played)
-```
+* fdjaskl;
+* fdsa
+
+
 
 
 # Methods {#sec-methods}
-
-Below is the linear regression formula:
+Below is the linear regression formula that was used in the analysis:
 
 $$Y = \beta_0 + \beta_1 X_{ca} + \beta_2 X_{gcp} + \beta_3 X_{pap} + \beta_4 X_{ppof} + \beta_5 X_{pop} + \beta_6 X_{sa} + \beta_7 X_{tsp} + \varepsilon_i$$
 
@@ -88,7 +91,40 @@ $X_{tsp}$ is the variable for tackle success percentage
 
 Each $\beta$ that is matched with a variable represents that variable's coefficient.
 
-We check in the 
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Residual Plots for each Predictor Variable"
+residual_nwsldata <- nwsldata |>
+  mutate(resid = rstandard(nwsl_fit)) |>
+  pivot_longer(c(cross_accuracy, goal_conversion_pct, pass_pct, pass_pct_opposition_half,
+                 possession_pct, shot_accuracy, tackle_success_pct),
+               names_to = "predictors", values_to = "values")
+
+ggplot(residual_nwsldata, aes(x = values, y = resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  geom_smooth(se = FALSE, method = "loess", color = "blue") +
+  facet_wrap(~ predictors, scales = "free_x") +
+  labs(x = "Predictor Values", y = "Standardized Residuals")
+
+ggplot(tibble(resid = rstandard(nwsl_fit)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red")
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Q-Q plots for each Predictor Variable"
+ggplot(tibble(resid = rstandard(nwsl_fit)), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red")
+```
+
+
 
 # Results {#sec-results}
 ```{r}
@@ -96,10 +132,6 @@ We check in the
 #| warning: false
 #| message: false
 
-lm <- lm(goal_diff_per_game ~ cross_accuracy + goal_conversion_pct + pass_pct + pass_pct_opposition_half + possession_pct + shot_accuracy + tackle_success_pct, data = nwsldata)
-
-tidy(lm, conf.int = TRUE)
-glance(lm)
 ```
 
 
@@ -110,18 +142,3 @@ glance(lm)
 # References
 
 
-
-
-
-
-
-<!--
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-#| fig-cap: ""
-
-
-```
--->
