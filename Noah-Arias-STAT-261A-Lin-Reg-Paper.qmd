@@ -2,10 +2,10 @@
 title: "Predicting Net Goals Between 2016 through 2022 in USA Women's Soccer League"
 subtitle: "A linear predictability analysis on the average goal differential per game."
 author: "Noah Arias"
-thanks: "Project repository available at: [https://github.com/ngarias/SJSU-STAT-257-Paper-1/tree/main](GitHub Repository)."
+thanks: "Project repository available at: [https://github.com/ngarias/SJSU-STAT-257-Paper-1/tree/main](https://github.com/ngarias/SJSU-STAT-257-Paper-1/tree/main)."
 date: today
 date-format: long
-abstract: ""
+abstract: "Measuring what make soccer teams successful is crucial. Using team-level data from the National Women's Soccer League from 2016 through 2022, we perform a linear regression on several predictors, such as tackle success percentage and cross accuracy, with goal difference per game as outcome. The results suggest that, despite goal conversion percentage having the largest coefficient at 0.1154, no single predictor has an outsized effect."
 format: pdf
 bibliography: references.bib
 number-sections: true
@@ -30,19 +30,33 @@ nwsldata <- read.csv("nwsl-team-stats.csv")
 nwsldata <- nwsldata |>
   mutate(goal_diff_per_game = goal_differential / games_played)
 
-nwsl_fit <- lm(goal_diff_per_game ~ cross_accuracy + goal_conversion_pct + pass_pct +
-                 pass_pct_opposition_half + possession_pct + shot_accuracy +
-                 tackle_success_pct,
-               data = nwsldata)
+nwsl_fit <- lm(goal_diff_per_game ~ scale(cross_accuracy) + scale(goal_conversion_pct) + scale(pass_pct) + scale(pass_pct_opposition_half) + scale(possession_pct) + scale(shot_accuracy) + scale(tackle_success_pct), data = nwsldata)
 ```
 
 # Introduction
+In the United States of America (USA), the top professional women's soccer league is the [National Women's Soccer League](https://www.nwslsoccer.com/)(NWSL). It was established in 2012 as the successor to Women's Professional Soccer. Each season runs from March through November. As of 2026, there are sixteen soccer teams present: Angel City FC, Bay FC, Boston Legacy FC, Chicago Stars FC, Denver Summit FC, Houston Dash, Kansas City Current, Gotham FC, North Carolina Courage, Orlando Pride, Portland Thorns FC, Racing Louisville FC, San Diego Wave FC, Seattle Reign FC, Utah Royals FC, and Washington Spirit. These teams, currently named and located, are *not* used in this analysis. This will be elaborated on in the data section.
 
-In the United States of America (USA), the top professional women's soccer league is the [National Women's Soccer League](https://www.nwslsoccer.com/). It was established in 2012 as the successor to Women's Professional Soccer, and its scope of play is exclusively the USA. As of 2026, there are sixteen soccer teams present and all sixteen are present in the dataset used for this analysis. The dataset in question contains various types of statistics over each `
+Determining the factors that make a soccer (football) team competitive and succeed in a league is critical. One of the immediate, but flawed, metrics that analysts will use is the overall "package" of a player. This is one of the central themes of the 2011 movie Moneyball starring Brad Pitt and Jonah Hill. When the two character's first meet, Hill's character says to Pitt's character: "People who run ball clubs, they think in terms of buying players. Your goal shouldn't be to buy players, your goal should be to buy wins. And in order to buy wins, you need to buy runs". The equivalent to soccer would be for a player, and by extention a team, to obtain the highest number of goals possible.
 
-One of the key team metrics is its goal differential. It is defined as the difference between the number of goals scored by the team minus the number of goals scored by the opponent. In this data set, the number of goals scored by the opponent is refered to as goals conceded.
+The metric of choice in this analysis is goal differential per team (GDPT). It is defined as the difference between the number of goals scored by the team minus the number of goals scored by the opponent (referred to as goals conceded) divided by the number of games played in a season:
 
-Since the goal differential metric is defined as the difference between the number of goals scored and number of goals scored upon, factors that go into either independent variable, such as passing and crossing accuracy, shot accuracy, and ball possession could be useful at predicting how successful a team was going to be in any given year.
+$$
+\text{goal differential per team} = \frac{\text{goals - goals conceded}}{\text{games played}}
+$$
+
+The game of soccer is highly complex and dynamical system, making predictions of any given game extremely hard to predict. However, any intrinsic skill brought forth by the players, should be present in the long-term, hence why goal differential per team is a ratio: for a high GDPT, teams need to consistently score well across all of their games. Given the definition of GDPT, factors that effect independent variable, such as passing and crossing accuracy, shot accuracy, and ball possession could be useful at predicting how successful a team was going to be in any given year.
+
+That data set that is used here is from the [SCORE Sports Data Repository](https://data.scorenetwork.org/soccer/nwsl-team-stats.html)(SCORE). It compiles important statistics from the teams participating in the NWSL from 2016 through 2022 such as cross accuracy, pass percentage, shot accuracy, and more.
+
+In this report, we try and determine if there is a linear relationship that reasonably predicts average goal differential per game based on cross accuracy, goal conversion percentage, pass percentage, pass percentage on opposition half, posession percentage, shot accuracy, and tackle success percentage.
+
+# Data {#sec-data}
+
+Originally compiled by researchers Arille Dror and Sophia Tannir back in 2019, the current iteration of the dataset contains data ranging from 2016 through 2022 is collected by Dror and its SCORE repository is maintained by Ron Yurko. Web scraping directly from the NWSL website compiled each season's data. Seasonal data for the year 2020 is excluded as the season was cancelled due to the COVID-19 pandemic.
+
+Not every team is represented in every year. For example, the Chicago Red Stars has data for every season whereas the Western New York Flash only have data for 2016. Other teams vary. Sometimes it is because the team no longer existed in the same form. This is the case with the Western New York Flash. This was a team that, despite winning the 2016 NWSL Championship, was sold to the owners of the North Carolina Football Club and was rebranded as the North Carolina Courage. This is why Western New York Flash is listed as the team name in 2016 but from 2017 to 2022, the team is now known as North Carolina Courage.
+
+Since each measurement is collected as a count or percentage, there are no units.
 
 The indepedent variables are the following:
 
@@ -60,36 +74,7 @@ The indepedent variables are the following:
 
 `tackle_success_pct`: the percentage of tackles where the defending player legally and successfully wins the soccer ball and either possesses the ball themself or passes the ball to another teammate.
 
-In this report, we try and determine if there is a linear relationship that reasonably predicts average goal differential per game based on cross accuracy, goal conversion percentage, pass percentage, pass percentage on opposition half, posession percentage, shot accuracy, and tackle success percentage.
-
-# Data {#sec-data}
-
-* fdjaskl;
-* fdsa
-
-
-
-
-# Methods {#sec-methods}
-Below is the linear regression formula that was used in the analysis:
-
-$$Y = \beta_0 + \beta_1 X_{ca} + \beta_2 X_{gcp} + \beta_3 X_{pap} + \beta_4 X_{ppof} + \beta_5 X_{pop} + \beta_6 X_{sa} + \beta_7 X_{tsp} + \varepsilon_i$$
-
-$X_{ca}$ is the variable for cross accuracy
-
-$X_{gcp}$ is the variable for goal conversion percentage
-
-$X_{pap}$ is the variable for pass percentage
-
-$X_{ppof}$ is the variable for pass percentage in opposition half
-
-$X_{pop}$ is the variable for posession percentage
-
-$X_{sa}$ is the variable for shot accuracy
-
-$X_{tsp}$ is the variable for tackle success percentage
-
-Each $\beta$ that is matched with a variable represents that variable's coefficient.
+The assumptions of linear regression must be valid for the conclusions of linear regression to hold. Importantly are the case that errors are independent, of equal variance, and normally distributed (especially for statistical tests.). We can infer the qualities of the error terms by looking at the residual and Q-Q plots:
 
 ```{r}
 #| echo: false
@@ -108,37 +93,78 @@ ggplot(residual_nwsldata, aes(x = values, y = resid)) +
   geom_smooth(se = FALSE, method = "loess", color = "blue") +
   facet_wrap(~ predictors, scales = "free_x") +
   labs(x = "Predictor Values", y = "Standardized Residuals")
-
-ggplot(tibble(resid = rstandard(nwsl_fit)), aes(sample = resid)) +
-  stat_qq() +
-  stat_qq_line(color = "red")
 ```
 
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-cap: "Q-Q plots for each Predictor Variable"
+#| fig-cap: "Normal Q-Q Plot"
 ggplot(tibble(resid = rstandard(nwsl_fit)), aes(sample = resid)) +
   stat_qq() +
   stat_qq_line(color = "red")
 ```
 
+Given the plots, it is fair to say the errors are indeed independent and have roughly equal variance. However, these plots do not provide firm evidence that the errors are normally distributed, which compromises the explanatory power of any hypothesis tests.
 
+# Methods {#sec-methods}
+Below is the linear regression formula that was used in the analysis:
+
+$$Y = \beta_0 + \beta_1 X_{ca} + \beta_2 X_{gcp} + \beta_3 X_{pap} + \beta_4 X_{ppof} + \beta_5 X_{pop} + \beta_6 X_{sa} + \beta_7 X_{tsp} + \varepsilon_i$$
+
+$X_{ca}$ is the variable for cross accuracy.
+
+$X_{gcp}$ is the variable for goal conversion percentage.
+
+$X_{pap}$ is the variable for pass percentage.
+
+$X_{ppof}$ is the variable for pass percentage in opposition half.
+
+$X_{pop}$ is the variable for posession percentage.
+
+$X_{sa}$ is the variable for shot accuracy.
+
+$X_{tsp}$ is the variable for tackle success percentage.
+
+It was briefly mentioned before that the assumptions of linear regression must be satisfied for the conclusions of linear regression to be valid. The residual and Q-Q plots 
 
 # Results {#sec-results}
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false
-
+#summary(nwsl_fit)
 ```
 
+The true parameters $\beta_1, \dots , \beta_n$ are estimated via ordinary least squares (OLS) as $\widehat{\beta}_1, \dots , \widehat{\beta}_n$ which minimizes the squared residual sum. The results from the linear regression analysis result in the regression formula being:
+
+$$
+\begin{aligned}
+\widehat{\text{goal differential per game}} &= -2.6899 + 0.0732 (\text{cross accuracy}) \\ &+ 0.1154(\text{goal conversion percentage}) \\ &- 0.0750(\text{pass percentage}) \\ &+ 0.0352(\text{pass percentage opposition half}) \\ &+ 0.0877(\text{possession percentage}) \\ &- 0.0154(\text{shot accuracy}) \\ &- 0.0141(\text{tackle success percentage})
+\end{aligned}
+$$
+
+We see that the intercept for the regression line is -2.6899 meaning that assuming all prediction variables are zero, the predicted goal differential per game is -2.6899. Each predictor's slope coefficient represents that a unit increase in the predictor changes the goal differential per game, on average, by the amount of the slope coefficient holding all other predictors constant. For example, given a unit increase in goal conversion percentage, on average, the goal prediction per game will increase by 0.1154 holding all other predictors constant.
 
 # Discussion {#sec-discussion}
+In conclusion, no single predictor clearly explains what makes a team successful against its opponents.
 
+There are some clear limitations of this analysis. Firstly, the data used is team-level and not player-level. It is concievable that certain players in individual positions on the team have exceptional capabilities that are "washed out" by weaker players that, as a result, brings down the team average. This "decreased resolution" prohibits other types of analysis. For example, the lack of player-level data disallows inquiries into comparing different players in the same position across different teams or if there are individual player outliers.
 
+Other limitations include that not every team played equally throughout 2016 and 2022, skewing the results. A future analysis should instead use a dataset where each team has the same number of season participations, if available.
+
+# Acknowledgements {#sec-acknowledgements}
+The author would like to deeply thank the STAT 261A class for their welcoming atmosphere, and give an extra special thanks to both Professor Peter Gao and Harshavardhan Reddy Seethagari for their crtical peer review.
+
+Mention AI usage statement:
 
 # References
+Nwsl. “Official Site of the National Women’s Soccer League.” NWSL, 15 Oct. 2026, [www.nwslsoccer.com/](www.nwslsoccer.com/).
+
+Yurko, Ron. “National Women’s Soccer League Team Statistics.” National Women’s Soccer League Team Statistics – SCORE Sports Data Repository, 18 Mar. 2023, [data.scorenetwork.org/soccer/nwsl-team-stats.html#references](data.scorenetwork.org/soccer/nwsl-team-stats.html#references). 
+
+Dror A (2023). *nwslR: Compiles dataset for the National Women’s Soccer League (NWSL).* R package version 0.0.0.9001.
+
+R Core Team (2026). *R: A Language and Environment for Statistical Computing.* R Foundation for Statistical Computing, Vienna, Austria. [https://www.R-project.org/](https://www.R-project.org/).
 
 
