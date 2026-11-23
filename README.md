@@ -2,10 +2,10 @@
 Introduction: A paper, by Noah Arias, on simple linear regression applied to a dataset of National Women's Soccer League team statistics from 2016 through 2022.
 
 # External Resources:
-This paper used LLMs for feedback and review of rough drafts. In no way was any AI or LLM tool used for novel statistical method or discussion of the data.
+This paper used large language model (LLMs) for feedback and review of rough drafts. In no way was any AI or LLM tool used for novel statistical method or discussion of the data.
 
 # Data Acquisition Statement:
-The data for this regression and analysis was acquired from the SCORE Sports Data Repository. The author, Ron Yurko, provides an MIT License with the following details:
+The data for this regression and analysis was acquired from the [SCORE Sports Data Repository](https://data.scorenetwork.org/soccer/nwsl-team-stats.html#references). The author, [Ron Yurko](https://www.stat.cmu.edu/~ryurko/), provides an MIT License with the following details:
 
 "MIT License
 
@@ -18,4 +18,4 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
 
 # Acknowledgements:
-The author would like to deeply thank the STAT 261A class for their welcoming atmosphere, and give an extra special thanks to both Professor Peter Gao and Harshavardhan ReddySeethagari for their crtical peer review
+The author would like to deeply thank the STAT 261A class for their welcoming atmosphere, and give an extra special thanks to both Professor Peter Gao and Harshavardhan Reddy Seethagari for their critical peer review.
