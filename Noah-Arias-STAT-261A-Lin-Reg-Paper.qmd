@@ -136,7 +136,7 @@ It was briefly mentioned before that the assumptions of linear regression must b
 #summary(nwsl_fit)
 ```
 
-The true parameters $\beta_1, \dots , \beta_n$ are estimated via ordinary least squares (OLS) as $\widehat{\beta}_1, \dots , \widehat{\beta}_n$ which minimizes the squared residual sum. The results from the linear regression analysis result in the regression formula being:
+The true parameters $\beta_1, \dots , \beta_n$ are estimated via ordinary least squares (OLS) as $\widehat{\beta}_1, \dots , \widehat{\beta}_n$ which minimizes the squared residual sum. This linear regression analysis provides the following formula:
 
 $$
 \begin{aligned}
@@ -145,6 +145,7 @@ $$
 $$
 
 We see that the intercept for the regression line is -2.6899 meaning that assuming all prediction variables are zero, the predicted goal differential per game is -2.6899. Each predictor's slope coefficient represents that a unit increase in the predictor changes the goal differential per game, on average, by the amount of the slope coefficient holding all other predictors constant. For example, given a unit increase in goal conversion percentage, on average, the goal prediction per game will increase by 0.1154 holding all other predictors constant.
+
 
 # Discussion {#sec-discussion}
 In conclusion, no single predictor clearly explains what makes a team successful against its opponents.
@@ -156,7 +157,7 @@ Other limitations include that not every team played equally throughout 2016 and
 # Acknowledgements {#sec-acknowledgements}
 The author would like to deeply thank the STAT 261A class for their welcoming atmosphere, and give an extra special thanks to both Professor Peter Gao and Harshavardhan Reddy Seethagari for their crtical peer review.
 
-Mention AI usage statement:
+Large language models were used for feedback. In no way were they used as a substitution for genuine novelty in this work.
 
 # References
 Nwsl. “Official Site of the National Women’s Soccer League.” NWSL, 15 Oct. 2026, [www.nwslsoccer.com/](www.nwslsoccer.com/).
